@@ -7,11 +7,13 @@ document.addEventListener(
     // Don't follow the link
     event.preventDefault();
 
-    // get name and date object
+    // get name and date from form
     var eN = document.getElementById("evNam");
-    var name = eN.value;
+    var n = eN.value;
     var eD = document.getElementById("evDat");
     var futDate = eD.value;
+    var counter = document.getElementById("counter");
+    var name = document.getElementById("name");
 
     // establish current time
     var currDate = new Date();
@@ -23,29 +25,30 @@ document.addEventListener(
     // find difference between dates in milliseconds
     var diff = setDate - currMil;
 
-    // arithmetic operations used to arrange data in readable fashion
-    var currSecs = currMil / 1000;
-
-    var currMins = currSecs / 60;
-
-    var currHours = currMins / 60;
-
-    var currDays = currHours / 24;
-
-    var currYears = currDays / 365;
-
-    // console logs for days
-    console.log(name);
-    console.log(futDate);
-    console.log(currDate);
-    console.log(setDate);
-    console.log(currMil);
-    console.log(currSecs);
-    console.log(currMins);
-    console.log(currHours);
-    console.log(currDays);
-    console.log(currYears);
     console.log(diff);
+
+    var seconds = Math.floor((diff / 1000) % 60),
+      minutes = Math.floor((diff / (1000 * 60)) % 60),
+      hours = Math.floor((diff / (1000 * 60 * 60)) % 24),
+      days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    hours = hours < 10 ? "0" + hours : hours;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    var placeholder = "";
+
+    if (days > 1) {
+      placeholder = " days ";
+    } else {
+      placeholder = " day ";
+    }
+
+    let formatted = days + placeholder + hours + ":" + minutes + ":" + seconds;
+
+    name.innerHTML = "<h2>" + n + "</h2>";
+
+    counter.innerHTML = "<h2> Time remaining: " + formatted + " </h2>";
   },
   false
 );
