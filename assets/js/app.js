@@ -25,35 +25,43 @@ document.addEventListener(
     // find difference between dates in milliseconds
     var diff = setDate - currMil;
 
-    if (isNaN(diff) === true) {
-      alert("Please enter a date, time, and AM/PM.");
-    } else if (n === "") {
+    if (n === "") {
       alert("Please enter a timer name.");
+    } else if (isNaN(diff) === true) {
+      alert("Please enter a date, time, and AM/PM.");
     } else {
-      // format time as day(s), hh:mm:ss
-      var seconds = Math.floor((diff / 1000) % 60),
-        minutes = Math.floor((diff / (1000 * 60)) % 60),
-        hours = Math.floor((diff / (1000 * 60 * 60)) % 24),
-        days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      var interval = window.setInterval(formatter, 1000);
 
-      hours = hours < 10 ? "0" + hours : hours;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
+      interval;
 
-      var placeholder = "";
+      function formatter() {
+        var seconds = Math.floor((diff / 1000) % 60),
+          minutes = Math.floor((diff / (1000 * 60)) % 60),
+          hours = Math.floor((diff / (1000 * 60 * 60)) % 24),
+          days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-      if (days > 1) {
-        placeholder = " days ";
-      } else {
-        placeholder = " day ";
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        console.log(diff);
+
+        var placeholder = "";
+
+        if (days > 1) {
+          placeholder = " days ";
+        } else {
+          placeholder = " day ";
+        }
+
+        let formatted =
+          days + placeholder + hours + ":" + minutes + ":" + seconds;
+
+        name.innerHTML = "<h1>" + n + "</h1>";
+
+        counter.innerHTML = "<h2> Time remaining: " + formatted + " </h2>";
+        diff - 1000;
       }
-
-      let formatted =
-        days + placeholder + hours + ":" + minutes + ":" + seconds;
-
-      name.innerHTML = "<h1>" + n + "</h1>";
-
-      counter.innerHTML = "<h2> Time remaining: " + formatted + " </h2>";
     }
   },
   false
