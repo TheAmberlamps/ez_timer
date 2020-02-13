@@ -30,9 +30,7 @@ document.addEventListener(
     } else if (isNaN(diff) === true) {
       alert("Please enter a date, time, and AM/PM.");
     } else {
-      var interval = window.setInterval(formatter, 1000);
-
-      interval;
+      window.setInterval(formatter, 1000);
 
       function formatter() {
         var seconds = Math.floor((diff / 1000) % 60),
@@ -50,8 +48,11 @@ document.addEventListener(
 
         if (days > 1) {
           placeholder = " days ";
-        } else {
+        } else if (days === 1) {
           placeholder = " day ";
+        } else {
+          placeholder = "";
+          days = "";
         }
 
         let formatted =
@@ -60,7 +61,12 @@ document.addEventListener(
         name.innerHTML = "<h1>" + n + "</h1>";
 
         counter.innerHTML = "<h2> Time remaining: " + formatted + " </h2>";
-        diff - 1000;
+        diff -= 1000;
+
+        if (diff === 0) {
+          alert("Time's up!");
+          window.clearInterval(formatter);
+        }
       }
     }
   },
