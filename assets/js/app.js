@@ -30,9 +30,10 @@ document.addEventListener(
     } else if (isNaN(diff) === true) {
       alert("Please enter a date, time, and AM/PM.");
     } else {
-      window.setInterval(formatter, 1000);
+      var cd = window.setInterval(formatter, 1000);
 
       function formatter() {
+        diff -= 1000;
         var seconds = Math.floor((diff / 1000) % 60),
           minutes = Math.floor((diff / (1000 * 60)) % 60),
           hours = Math.floor((diff / (1000 * 60 * 60)) % 24),
@@ -41,8 +42,6 @@ document.addEventListener(
         hours = hours < 10 ? "0" + hours : hours;
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        console.log(diff);
 
         var placeholder = "";
 
@@ -61,11 +60,14 @@ document.addEventListener(
         name.innerHTML = "<h1>" + n + "</h1>";
 
         counter.innerHTML = "<h2> Time remaining: " + formatted + " </h2>";
-        diff -= 1000;
+
+        console.log(diff / 1000);
 
         if (diff === 0) {
           alert("Time's up!");
-          window.clearInterval();
+          window.clearInterval(cd);
+          name.innerHTML = "";
+          counter.innerHTML = "";
         }
       }
     }
