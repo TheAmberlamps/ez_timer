@@ -65,7 +65,7 @@ document.addEventListener(
 
         if (diff === 0) {
           alert("Time's up!");
-          window.clearInterval(formatter);
+          window.clearInterval();
         }
       }
     }
