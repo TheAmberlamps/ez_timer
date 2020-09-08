@@ -1,6 +1,6 @@
 document.addEventListener(
   "click",
-  function(event) {
+  function (event) {
     // If the clicked element doesn't have the right selector, bail
     if (!event.target.matches("#click-me")) return;
 
@@ -46,16 +46,23 @@ document.addEventListener(
         var placeholder = "";
 
         if (days > 1) {
-          placeholder = " days ";
+          placeholder = " days, ";
         } else if (days === 1) {
-          placeholder = " day ";
+          placeholder = " day, ";
         } else {
           placeholder = "";
           days = "";
         }
 
         let formatted =
-          days + placeholder + hours + ":" + minutes + ":" + seconds;
+          days +
+          placeholder +
+          hours +
+          " hours, " +
+          minutes +
+          " minutes, " +
+          seconds +
+          " seconds.";
 
         name.innerHTML = "<h1>" + n + "</h1>";
 
