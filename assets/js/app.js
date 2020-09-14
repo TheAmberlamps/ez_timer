@@ -1,83 +1,102 @@
-document.addEventListener(
-  "click",
-  function (event) {
-    // If the clicked element doesn't have the right selector, bail
-    if (!event.target.matches("#click-me")) return;
+let state = 0;
 
-    // Don't let button trigger default action
-    event.preventDefault();
+document.addEventListener("click", function (event) {
+  // If the clicked element doesn't have the right selector, bail
+  if (!event.target.matches("#click-me")) return;
 
-    // get name and date from form
-    var eN = document.getElementById("evNam");
-    var n = eN.value;
-    var eD = document.getElementById("evDat");
-    var futDate = eD.value;
-    var counter = document.getElementById("counter");
-    var name = document.getElementById("name");
+  // Don't let button trigger default action
+  event.preventDefault();
 
-    // establish current time
-    var currDate = new Date();
+  // get name and date from form
+  var eN = document.getElementById("evNam");
+  var n = eN.value;
+  var eD = document.getElementById("evDat");
+  var futDate = eD.value;
+  var counter = document.getElementById("counter");
+  var name = document.getElementById("name");
 
-    // parse dates into milliseconds
-    var setDate = Date.parse(futDate);
-    var currMil = Date.parse(currDate);
-
-    // find difference between dates in milliseconds
-    var diff = setDate - currMil;
-
-    if (n === "") {
-      alert("Please enter a timer name.");
-    } else if (isNaN(diff) === true) {
-      alert("Please enter a date, time, and AM/PM.");
+  if (state === 1) {
+    let conf = window.confirm(
+      "Do you want to cancel the existing timer and start this one?"
+    );
+    if (conf === false) {
+      return;
     } else {
-      var cd = window.setInterval(formatter, 1000);
+      console.log("resetting timer");
+      window.clearInterval(cd);
+      name.innerHTML = "";
+      counter.innerHTML = "";
+    }
+  }
 
-      function formatter() {
-        diff -= 1000;
-        var seconds = Math.floor((diff / 1000) % 60),
-          minutes = Math.floor((diff / (1000 * 60)) % 60),
-          hours = Math.floor((diff / (1000 * 60 * 60)) % 24),
-          days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  // establish current time
+  var currDate = new Date();
 
-        hours = hours < 10 ? "0" + hours : hours;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+  // parse dates into milliseconds
+  var setDate = Date.parse(futDate);
+  var currMil = Date.parse(currDate);
 
-        var placeholder = "";
+  // find difference between dates in milliseconds
+  var diff = setDate - currMil;
 
-        if (days > 1) {
-          placeholder = " days, ";
-        } else if (days === 1) {
-          placeholder = " day, ";
-        } else {
-          placeholder = "";
-          days = "";
-        }
+  if (diff < 0) {
+    alert("Timers cannot be set in the past.");
+    return;
+  }
 
-        let formatted =
-          days +
-          placeholder +
-          hours +
-          " hours, " +
-          minutes +
-          " minutes, " +
-          seconds +
-          " seconds.";
+  if (n === "") {
+    alert("Please enter a timer name.");
+  } else if (isNaN(diff) === true) {
+    alert("Please enter a date, time, and AM/PM.");
+  } else {
+    state = 1;
+    cd = window.setInterval(formatter, 1000);
 
-        name.innerHTML = "<h1>" + n + "</h1>";
+    function formatter() {
+      diff -= 1000;
+      var seconds = Math.floor((diff / 1000) % 60),
+        minutes = Math.floor((diff / (1000 * 60)) % 60),
+        hours = Math.floor((diff / (1000 * 60 * 60)) % 24),
+        days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-        counter.innerHTML = "<h2> Time remaining: " + formatted + " </h2>";
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        console.log(diff / 1000);
+      var placeholder = "";
 
-        if (diff === 0) {
-          alert("Time's up!");
-          window.clearInterval(cd);
-          name.innerHTML = "";
-          counter.innerHTML = "";
-        }
+      if (days > 1) {
+        placeholder = " days, ";
+      } else if (days === 1) {
+        placeholder = " day, ";
+      } else {
+        placeholder = "";
+        days = "";
+      }
+
+      let formatted =
+        days +
+        placeholder +
+        hours +
+        " hours, " +
+        minutes +
+        " minutes, " +
+        seconds +
+        " seconds.";
+
+      name.innerHTML = "<h1>" + n + "</h1>";
+
+      counter.innerHTML = "<h2> Time remaining: " + formatted + " </h2>";
+
+      console.log(diff / 1000);
+
+      if (diff === 0) {
+        alert("Time's up!");
+        window.clearInterval(cd);
+        name.innerHTML = "";
+        counter.innerHTML = "";
+        state = 0;
       }
     }
-  },
-  false
-);
+  }
+});
